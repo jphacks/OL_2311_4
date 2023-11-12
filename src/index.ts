@@ -10,8 +10,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.json());
 
-app.post("/", async (req, res) => {
-  console.log(req.body); // Log the parsed JSON body
+app.post("/extract-keywords", async (req, res) => {
   const chatCompletion = await openai.chat.completions.create({
     messages: [
       {
@@ -24,7 +23,10 @@ app.post("/", async (req, res) => {
     model: "gpt-3.5-turbo-1106",
   });
 
-  res.send(chatCompletion.choices[0].message?.content);
+  const keywordsString = chatCompletion.choices[0].message?.content?.trim();
+  const keywordsArray = keywordsString?.split(",").map((s: string) => s.trim());
+
+  res.json(keywordsArray);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
