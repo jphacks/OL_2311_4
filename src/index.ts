@@ -10,6 +10,10 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.post("/extract-keywords", async (req, res) => {
   const chatCompletion = await openai.chat.completions.create({
     messages: [
